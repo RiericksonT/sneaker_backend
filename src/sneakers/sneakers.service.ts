@@ -18,9 +18,20 @@ export class SneakersService {
   }
 
   findOne(id: number) {
-    return this.prisma.sneaker.findUnique({
-      where: { id },
-    });
+    return this.prisma.sneaker
+      .findUnique({
+        where: { id },
+      })
+      .catch(e => {
+        console.error(e);
+        throw e;
+      })
+      .then(sneaker => {
+        if (!sneaker) {
+          throw new Error('Sneaker not found');
+        }
+        return sneaker;
+      });
   }
 
   update(id: number, updateSneakerDto: UpdateSneakerDto) {

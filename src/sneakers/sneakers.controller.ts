@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Logger,
 } from '@nestjs/common';
 import { SneakersService } from './sneakers.service';
 import { UpdateSneakerDto } from './dto/update-sneaker.dto';
@@ -17,7 +18,12 @@ export class SneakersController {
 
   @Post()
   create(@Body() createSneakerDto: Prisma.SneakerCreateInput) {
-    return this.sneakersService.create(createSneakerDto);
+    try {
+      return this.sneakersService.create(createSneakerDto);
+    } catch (e) {
+      Logger.error(e);
+      throw e;
+    }
   }
 
   @Get()

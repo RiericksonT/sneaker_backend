@@ -1,0 +1,20 @@
+receivers:
+  k8s_events:
+    auth_type: serviceAccount
+
+processors:
+  batch:
+
+exporters:
+  otlp/k8sevents:
+    endpoint: api.honeycomb.io:443
+    headers:
+      "x-honeycomb-team": YOUR_API_KEY # Use your Honeycomb API Key here
+      "x-honeycomb-dataset": kubernetes-k8sevents # Use your preferred dataset name here
+
+service:
+  pipelines:
+    logs:
+      receivers: [k8s_events]
+      processors: [batch]
+      exporters: [otlp/k8sevents]
